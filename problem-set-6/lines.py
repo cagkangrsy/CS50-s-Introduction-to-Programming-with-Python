@@ -1,23 +1,26 @@
-# mplement a program that expects exactly one command-line argument, the name (or path) of a Python file, and outputs the number of lines of code in that file.
-
 import sys
 
 def main():
-    if len(sys.argv) != 2:
-        print("Usage: python lines.py filename")
-        sys.exit(1)
+    if len(sys.argv) < 2:
+        sys.exit("Too few command-line arguments")
+    elif len(sys.argv) > 2:
+        sys.exit("Too many command-line arguments")
 
     filename = sys.argv[1]
 
+    if filename.split(".")[1] != "py":
+        sys.exit("Not a Python file")
+
     try:
-        with open(filename
-        ) as file:
+        with open(filename) as file:
             lines = file.readlines()
-            count = 0
+            line_count = 0
             for line in lines:
                 if line.strip() and not line.strip().startswith("#"):
-                    count += 1
-            print(count)
+                    line_count += 1
+            print(line_count)
     except FileNotFoundError:
-        print(f"Cannot find file: {filename}")
-        sys.exit(1)
+        sys.exit("File does not exist")
+
+if __name__ == "__main__":
+    main()
